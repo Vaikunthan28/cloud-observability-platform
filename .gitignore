@@ -19,3 +19,4 @@ terraform/*.tfplan
 # Temp files
 *.log
 *.tmp
+terraform/observability-lab-config
