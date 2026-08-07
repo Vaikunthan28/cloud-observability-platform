@@ -1,0 +1,38 @@
+server:
+  enabled: true
+  persistentVolume:
+    enabled: false
+  extraFlags:
+    - web.enable-remote-write-receiver
+  resources:
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+
+extraScrapeConfigs: |
+  - job_name: 'kubernetes-pods-apps'
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - apps
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_container_port_number]
+        action: keep
+        regex: .*
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: pod
+
+alertmanager:
+  enabled: false
+
+nodeExporter:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
