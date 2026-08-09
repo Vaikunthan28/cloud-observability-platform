@@ -72,6 +72,8 @@ make port-forward   # Grafana at http://localhost:3000 (admin/admin)
 
 `admin/admin` is a local-lab credential only. In a real environment this would come from a secrets manager (Vault, External Secrets Operator, sealed-secrets), not a values file.
 
+The frontend needs no extra step to reach because `make apps` also deploys an NGINX Ingress bound to the same host port 80 the kind cluster maps in (see `extraPortMappings` in `terraform/main.tf`), that's a standing route, always live while the cluster's running. Grafana, Prometheus, and Tempo don't have an Ingress in front of them, they're ClusterIP only, so `make port-forward` opens a temporary tunnel straight to one pod instead, and it only lasts as long as that terminal stays open. A real deployment would put an Ingress in front of those too, port-forward here is a lab-only shortcut.
+
 ## What each phase deploys
 
 **`make cluster`**: single-node kind cluster with port 80 mapped to the host, `apps` and `observability` namespaces created via Terraform.
