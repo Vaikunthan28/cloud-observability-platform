@@ -31,6 +31,26 @@ kind cluster (single node)
     ├── OpenTelemetry Operator
     └── OpenTelemetry Collector (OTLP receiver -> Tempo / Loki / Prometheus)
 ```
+## Screenshots
+
+[#screenshots](#screenshots)
+
+**Both namespaces healthy.**
+
+![App pods running](docs/screenshots/app-pods.png)
+![Observability stack pods running](docs/screenshots/observability-pods.png)
+
+**Grafana, imported Kubernetes Cluster dashboard**, live node CPU, memory, load, and pod restart counts.
+
+![Kubernetes cluster dashboard](docs/screenshots/k8s-dashboard.png)
+
+**Tempo, trace list for `adservice`.**
+
+![Tempo trace list](docs/screenshots/tempo-traces.png)
+
+**Tempo, trace waterfall for a single call.** Note it reports "1 spans" and "Services 1", this is the honest current state: `adservice` is exporting real spans, but because `frontend` and `checkoutservice` don't yet propagate trace context, each trace stops at one service instead of following the request across the full chain. See Known Limitations above.
+
+![Trace waterfall, single span](docs/screenshots/trace-waterfall.png)
 
 ## Tech stack
 
